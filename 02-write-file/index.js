@@ -3,6 +3,7 @@ const path = require("path");
 const readline = require("node:readline");
 
 const { stdin: input, stdout: output } = require("node:process");
+output.write("hello man! tnter tour text...\n");
 const rl = readline.createInterface({input, output});
 var inputText = fs.createWriteStream(path.join(__dirname, "text.txt"));
 rl.on("line", (input) => {
@@ -15,5 +16,5 @@ rl.on("line", (input) => {
 });
 rl.on("SIGINT", () => {
     console.log("Goodbye man!");
-    rl.close;
+    rl.close();
 });
