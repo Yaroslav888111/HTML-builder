@@ -1,12 +1,21 @@
-const fs = require("fs");
+const fs = require("fs/promises");
 const path = require("path");
-const absolutePath = path.resolve(__dirname, "secret-folder");
-const files = fs.readdirSync(absolutePath);
-for ( const file of files ) {
-    const fileConf = fs.statSync(`${absolutePath}/${file}`);
-    if ( fileConf.isFile() ) {
-        const extN = path.extname(`${absolutePath}/${file}`);
-        const size = fileConf.size / 1024;
-        console.log(`${file} - ${extN} - ${size.toFixed(3)}kb`);
-    }
-}
+const secretPath = path.join(__dirname, "secret-folder");
+
+fs.readdir(secretPath, {withFileTypes: true})
+.then((result) => {
+    result.forEach((item) => {
+        if (item.isFile()) {
+            const newPath = path.join(secretPath, item.name);
+            const extN = path.extname(newPath);
+            const nameF = path.basename(newPath,extN);
+            fs.stat(newPath)
+            .then((stat) => {
+                console.log(
+                    `${nameF} - ${extN.slice(1)} - ${(stat.size / 1024).toFixed(3)}kb`,
+                );
+            });
+        }
+    });
+});
+
